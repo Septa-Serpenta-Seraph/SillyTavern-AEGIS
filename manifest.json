@@ -1,0 +1,12 @@
+{
+    "display_name": "AEGIS — Daemon Terminal Bridge",
+    "loading_order": 100,
+    "requires": [],
+    "optional": [],
+    "js": "index.js",
+    "css": "style.css",
+    "author": "Narusya & Adora",
+    "version": "1.0.0",
+    "description": "Execute terminal commands through an approval-gated Docker bridge. Gives AI characters hands.",
+    "homePage": "https://github.com/Septa-Serpenta-Seraph/SillyTavern-AEGIS"
+}

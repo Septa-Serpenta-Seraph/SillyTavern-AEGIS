@@ -1,0 +1,118 @@
+/* AEGIS — Purple Gate Modal */
+.aegis-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: sans-serif;
+}
+
+.aegis-modal {
+    background: #1a1a2e;
+    border: 2px solid #a855f7;
+    border-radius: 12px;
+    padding: 24px 32px;
+    max-width: 500px;
+    width: 90%;
+    color: #e0e0e0;
+    box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);
+}
+
+.aegis-modal h2 {
+    color: #a855f7;
+    margin: 0 0 8px 0;
+    font-size: 18px;
+}
+
+.aegis-modal .aegis-label {
+    color: #888;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+.aegis-modal .aegis-cmd {
+    background: #0d0d1a;
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 12px;
+    font-family: monospace;
+    font-size: 15px;
+    color: #f43f5e;
+    margin-bottom: 20px;
+    word-break: break-all;
+}
+
+.aegis-modal .aegis-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.aegis-modal button {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.aegis-modal button:hover { opacity: 0.85; }
+
+.aegis-approve { background: #22c55e; color: #000; }
+.aegis-extended { background: #b8860b; color: #fff; }
+.aegis-deny { background: #f43f5e; color: #fff; }
+
+/* Settings Panel */
+.aegis-settings {
+    padding: 10px 0;
+}
+
+.aegis-settings label {
+    display: block;
+    margin: 8px 0 4px 0;
+    font-weight: bold;
+}
+
+.aegis-settings input[type="text"],
+.aegis-settings input[type="number"] {
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background: #1a1a2e;
+    color: #e0e0e0;
+    font-family: monospace;
+    box-sizing: border-box;
+}
+
+.aegis-settings .aegis-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.aegis-settings .aegis-row label {
+    flex: 1;
+}
+
+.aegis-settings .aegis-row input {
+    width: 120px;
+    flex: none;
+}
+
+.aegis-status-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.aegis-status-badge.online { background: #22c55e; color: #000; }
+.aegis-status-badge.offline { background: #f43f5e; color: #fff; }

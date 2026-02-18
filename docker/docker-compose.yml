@@ -1,0 +1,8 @@
+version: "3.8"
+services:
+  aegis:
+    build: .
+    container_name: aegis-bridge
+    ports:
+      - "5005:5005"
+    restart: unless-stopped

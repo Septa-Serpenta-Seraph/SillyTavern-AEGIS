@@ -1,0 +1,49 @@
+<div class="aegis-settings" id="aegis_settings">
+    <div class="inline-drawer">
+        <div class="inline-drawer-toggle inline-drawer-header">
+            <b>AEGIS — Daemon Terminal Bridge</b>
+            <div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div>
+        </div>
+        <div class="inline-drawer-content">
+            <div style="margin-bottom: 8px;">
+                Bridge Status: <span id="aegis_status_badge" class="aegis-status-badge offline">Checking...</span>
+            </div>
+
+            <label for="aegis_bridge_url">Bridge URL</label>
+            <input type="text" id="aegis_bridge_url" class="text_pole" placeholder="http://127.0.0.1:5005" />
+
+            <div class="aegis-row" style="margin-top: 8px;">
+                <label for="aegis_default_timeout">Default Timeout (s)</label>
+                <input type="number" id="aegis_default_timeout" class="text_pole" min="5" max="600" step="5" />
+            </div>
+
+            <div class="aegis-row">
+                <label for="aegis_extended_timeout">Extended Timeout (s)</label>
+                <input type="number" id="aegis_extended_timeout" class="text_pole" min="30" max="600" step="30" />
+            </div>
+
+            <div class="aegis-row">
+                <label for="aegis_debounce">Debounce Scans (daemon)</label>
+                <input type="number" id="aegis_debounce" class="text_pole" min="1" max="10" step="1" />
+            </div>
+
+            <div style="margin-top: 8px;">
+                <label class="checkbox_label" for="aegis_enabled">
+                    <input type="checkbox" id="aegis_enabled" />
+                    <span>Enable AEGIS Scanner</span>
+                </label>
+            </div>
+
+            <div>
+                <label class="checkbox_label" for="aegis_base64">
+                    <input type="checkbox" id="aegis_base64" />
+                    <span>Base64 Encode Commands (fixes pipe/quote issues)</span>
+                </label>
+            </div>
+
+            <div style="margin-top: 12px;">
+                <button id="aegis_test_btn" class="menu_button">⚡ Test Connection</button>
+            </div>
+        </div>
+    </div>
+</div>
