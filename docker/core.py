@@ -3,13 +3,17 @@ from flask_cors import CORS
 import subprocess
 import re
 import os
+import base64
 from datetime import datetime
 
 app = Flask(__name__)
 CORS(app)
 
 # --- SHIELD: Output Sanitization ---
-DANGEROUS_TOKENS = ['[STRIKE]', '[CONFIG]', '[GIT]']
+DANGEROUS_TOKENS = ['[TOOL]', '[CONFIG]', '[GIT]', '[INST]', '[SYS]', '[ASSISTANT]']
+
+# --- AUTH: API Token ---
+AEGIS_BRIDGE_TOKEN = os.getenv('AEGIS_BRIDGE_TOKEN')
 
 def sanitize_output(text):
     """Neutralize any tokens in command output that could trigger the watcher."""
@@ -30,12 +34,24 @@ def audit(cmd, output, status):
 
 # --- BLOCKED COMMANDS ---
 BLOCKED_PATTERNS = [
-    r'rm\s+(-[a-zA-Z]*f[a-zA-Z]*\s+)?/',    # rm -rf /
-    r'mkfs',                                    # format disk
-    r'dd\s+if=',                                # disk destroyer
-    r':\(\)\{.*\}',                             # fork bomb
-    r'>\s*/dev/sd',                             # overwrite disk
-    r'chmod\s+777\s+/',                         # dangerous chmod on root
+    r'rm\s+(-[a-zA-Z]*f[a-zA-Z]*\s+)?/',       # rm -rf / (any flag combo)
+    r'rm\s+-[a-zA-Z]*r[a-zA-Z]*\s',             # rm -r (recursive anywhere)
+    r'mkfs',                                     # format disk
+    r'dd\s+if=',                                 # disk destroyer
+    r':\(\)\{.*\}',                              # fork bomb
+    r'>\s*/dev/sd',                              # overwrite disk
+    r'chmod\s+777\s+/',                          # dangerous chmod on root
+    r'find\s+/.*-delete',                        # find / -delete
+    r'find\s+/.*-exec.*rm',                      # find / -exec rm
+    r'wget.*\|\s*(ba)?sh',                       # curl/wipe piped to shell
+    r'curl.*\|\s*(ba)?sh',                       # curl piped to shell
+    r'>\s*/etc/',                                # overwrite system configs
+    r'cat\s+/etc/shadow',                        # read password hashes
+    r'usermod|userdel|groupdel',                 # modify users/groups
+    r'iptables\s+-F',                            # flush firewall
+    r'systemctl\s+stop',                         # stop services
+    r'passwd\s+root',                            # change root password
+    r'chmod\s+-R\s+777',                         # recursive chmod 777
 ]
 
 def is_blocked(cmd):
@@ -43,6 +59,23 @@ def is_blocked(cmd):
         if re.search(pattern, cmd):
             return True
     return False
+
+# --- AUTH MIDDLEWARE ---
+@app.before_request
+def _check_bridge_auth():
+    if AEGIS_BRIDGE_TOKEN is None:
+        return  # No token configured — open access (dev mode only!)
+    # Health endpoint is exempt
+    if request.path == '/health':
+        return
+    # Check Bearer token
+    auth = request.headers.get('Authorization', '')
+    if auth == f'Bearer {AEGIS_BRIDGE_TOKEN}':
+        return
+    # Accept ?token= param for testing
+    if request.args.get('token') == AEGIS_BRIDGE_TOKEN:
+        return
+    return jsonify({'error': 'Unauthorized'}), 401
 
 @app.route('/strike', methods=['POST'])
 def strike():
